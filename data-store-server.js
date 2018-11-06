@@ -104,11 +104,12 @@ const handlers = [
             } else if (userInfo.pass.length < 8) {
                 respond({ code: 'INVALID_PASSWORD', message: 'Password must be at least 8 characters long' }, 400);
             } else {
+                const session = sessionHandler.getSession(userInfo.token);
                 session.user = {
                     name: userInfo.user,
-                    pass: hash(userInfo.pass)
+                    pass: security.hash(userInfo.pass)
                 };
-                db.createUser(user.name, user.pass, config.limits.users);
+                db.createUser(userInfo.name, userInfo.pass, config.limits.users);
                 respond({ code: 'USER_CREATED' });
             }
         }
