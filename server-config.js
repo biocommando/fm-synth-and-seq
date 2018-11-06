@@ -1,5 +1,5 @@
 const config = {
-	port: 8080,
+	port: process.env.PORT ? process.env.PORT : 8080,
 	pathToStaticFiles: '/ui-js/dist',
 	limits: {
 		users: 100,
