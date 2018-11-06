@@ -1,0 +1,11 @@
+{
+  "name": "data-store-server",
+  "version": "0.0.0",
+  "dependencies": {
+    "serve-static": "1.13.2",
+    "connect": "3.6.6"
+  },
+  "scripts": {
+    "start": "node data-store-server.js"
+  }
+}

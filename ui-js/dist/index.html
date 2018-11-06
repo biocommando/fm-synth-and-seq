@@ -1,0 +1,72 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="knobs.css">
+    <link rel="stylesheet" href="synth-editor.css">
+    <title>2 OP FM Synth</title>
+</head>
+
+<body>
+    <div id="grid" class="row">
+    </div>
+    <div>
+        <button id="play-button">PLAY</button>
+        <button id="stop-button">STOP</button>
+        <input id="page-name" />
+        <button id="clear-button">Clear</button>
+        <button id="copy-button">Copy</button>
+        <button id="paste-button">Paste</button>
+    </div>
+    <div>
+        <!--<button id="page-minus-button">&lt;- PAGE</button>
+        <span id="page-num"></span>
+        <button id="page-plus-button">PAGE -&gt;</button>-->
+        Edit page: <select id="page-selector"></select>
+        Channel preset:
+        <select id="preset-select">
+            <option value="none">preset...</option>
+        </select>
+    </div>
+    <div>
+        <div>
+            <div id="fm-param-knobs" class="knob-root">
+                <div class="knob-group-title">Synth parameters</div>
+            </div>
+            <div id="other-param-knobs" class="knob-root">
+                <div class="knob-group-title">General parameters</div>
+            </div>
+            <div id="fx-param-knobs" class="knob-root hidden">
+                <div class="knob-group-title">Effect parameters</div>
+            </div>
+        </div>
+    </div>
+    Edit effect: <select id="current-fx">
+        <option value="none">choose...</option>
+    </select>
+
+    <button id="remove-fx-button">remove</button>
+    Insert new effect:
+    <select id="fx-list">
+        <option value="none">choose...</option>
+    </select>
+    <div>
+        <button id="save-load-button">Save/load...</button>
+        <button id="clear-track-button">Start over</button>
+    </div>
+    <div id="to-json" class="hidden">
+        <table>
+            <thead>
+                <th>Name</th>
+                <th>Date</th>
+                <th colspan="4">Actions</th>
+            </thead>
+            <tbody id="directory"></tbody>
+        </table>
+
+        <button onclick="document.getElementById('to-json').classList.add('hidden')">Cancel</button>
+    </div>
+    <div class="footer">Copyrights &copy; 2018 Joonas Salonpää</div>
+    <script src="main.js"></script>
+</body>
+
+</html>

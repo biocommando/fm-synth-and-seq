@@ -1,0 +1,98 @@
+
+* {
+    font-family: 'Consolas', monospace;
+    font-weight: bold;
+    font-size: 18px;
+
+    /*no select*/
+    -webkit-user-select: none;
+    /* Safari */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* IE10+/Edge */
+    user-select: none;
+    /* Standard */
+}
+
+body {
+    background-color: darkcyan;
+}
+
+#grid {
+    background-color: black;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.grid-cell {
+    width: 50px;
+    height: 50px;
+    background-color: darkgray;
+    margin: 5px;
+}
+.grid-cell--composition {
+    background-color: darkmagenta;
+}
+
+.grid-cell--beat-start {
+    background-color: darkcyan;
+}
+
+.grid-cell--active {
+    background-color: green;
+}
+.grid-cell--active.grid-cell--composition {
+    background-color: magenta;
+}
+
+.grid-cell--playing--active {
+    background-color: lime;
+}
+
+.grid-cell--playing {
+    background-color: darkcyan;
+}
+
+button,
+select,
+input {
+    margin: 5px;
+    height: 50px;
+    background-color: salmon;
+}
+
+table {
+    background-color: aliceblue;
+}
+td, th {
+    border: 1px solid black;
+}
+
+.footer {
+  margin-top: 100px;
+}
+
+.knob-root {
+    display: inline-block;
+    border: 1px dashed salmon;
+}
+
+.knob-group-title {
+    margin-top: 5px;
+    border-bottom: 1px solid wheat;
+    text-align: center;
+    color: wheat;
+}
+
+.hidden {
+    display: none;
+}

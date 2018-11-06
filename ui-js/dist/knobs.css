@@ -1,0 +1,32 @@
+/*
+ * Copyrights 2017 by Joonas Salonpää
+ */
+ 
+
+.knob-container {
+	text-align: center;
+	margin-top: 15px;
+	margin-bottom: 15px;
+	font-family: tahoma;
+	font-size: 12px;
+	display: inline-block;
+}
+.knob {
+	width: 49px;
+	height: 49px; 
+	margin: 15px;
+	background-image: url("knob.png");
+	touch-action: none;
+}
+.knob-title {
+	font-weight: bold;
+}
+
+.knob-container span {
+	display: block;
+	/*no select*/
+	-webkit-user-select: none; /* Safari */        
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+/Edge */
+	user-select: none; /* Standard */
+}
