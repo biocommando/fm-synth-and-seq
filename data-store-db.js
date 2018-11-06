@@ -1,4 +1,15 @@
 const fs = require('fs');
+const { Client } = require('pg');
+
+const client = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: true
+})
+client.connect()
+//client.query('CREATE TABLE fm_seq.data ( id bigint, data text )')
+//client.query('CREATE SCHEMA fm_seq')
+//client.query('insert into fm_seq.data (id, data) values (1, \'{"users":[],"data":[]}\')')
+
 
 let database;
 let file;
@@ -6,12 +17,16 @@ let receivedUpdates = false;
 
 const connect = (fileName = 'db.dat') => {
     file = fileName;
-    database = JSON.parse(fs.readFileSync(file) + '');
+    //database = JSON.parse(fs.readFileSync(file) + '');
+    client.query('select * from fm_seq.data where id = 1').then((res) => {
+        database = JSON.parse(res.rows[0].data);
+    });
 };
 
 const persist = () => {
     if (receivedUpdates) {
-        fs.writeFileSync(file, JSON.stringify(database));
+        //fs.writeFileSync(file, JSON.stringify(database));
+        client.query('update fm_seq.data set data = $1', JSON.stringify(database));
         receivedUpdates = false;
         return true;
     }
