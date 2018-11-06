@@ -31,7 +31,7 @@ const createUser = (userName, password, userCountLimit = 1000) => {
     }
     if (!getUser(userName)) {
         database.users.push({
-            user: userName,
+            name: userName,
             pass: password,
             created: Date.now(),
             lastAccessed: Date.now()
@@ -52,9 +52,11 @@ const getDataList = user => {
 const setData = (user, id, data, fileLimit = 1000) => {
     if (!id) {
         if (!getUser(user.name)) {
+            console.log('saving failed because username ' + user.name + ' not found');
             return false;
         }
         if (getDataList(user).length >= fileLimit) {
+            console.log('saving failed because file limit reached');
             return false;
         }
 

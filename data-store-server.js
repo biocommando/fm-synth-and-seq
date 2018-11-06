@@ -109,7 +109,7 @@ const handlers = [
                     name: userInfo.user,
                     pass: security.hash(userInfo.pass)
                 };
-                db.createUser(userInfo.name, userInfo.pass, config.limits.users);
+                db.createUser(session.user.name, session.user.pass, config.limits.users);
                 respond({ code: 'USER_CREATED' });
             }
         }
