@@ -1,7 +1,7 @@
 import {fx} from './fx';
 import * as state from './state';
 import {verySmallSynth} from './verysmallsynth';
-
+import {updatePlayStatusToGrid} from './synth-editor';
 
 const convertIndexToNote = i => {
     switch (i) {
@@ -85,29 +85,29 @@ const mapToSequence = () => {
 };
 
 export const play = () => {
-    if (state.playing) {
+    if (state.synth && state.synth.playing()) {
         return;
     }
     const seq = mapToSequence();
     if (!state.synth) {
-        state.synth = verySmallSynth(seq, state.tempo * 2);
+        state.synth = verySmallSynth(seq, state.tempo * 2, updatePlayStatusToGrid);
     } else {
-        updateSequence();
+        state.synth.update(seq, state.tempo * 2);
     }
-    state.synthSequenceUpdater = state.synth(state.pages[state.currentPage].compositionEditStartStep * 32);
-    state.playing = true;
+    state.synth.toggle(state.pages[state.currentPage].compositionEditStartStep * 32);
+    updatePlayStatusToGrid();
 };
 
 export const stop = () => {
-    if (!state.playing) {
+    if (!state.synth.playing()) {
         return;
     }
-    state.synth();
-    state.playing = false;
+    state.synth.toggle();
+    updatePlayStatusToGrid();
 };
 
 export const updateSequence = () => {
-    if (state.synthSequenceUpdater) {
-        state.synthSequenceUpdater(mapToSequence(), state.tempo * 2);
+    if (state.synth) {
+        state.synth.update(mapToSequence(), state.tempo * 2);
     }
 };

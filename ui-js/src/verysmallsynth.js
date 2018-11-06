@@ -53,7 +53,7 @@
 * The function for starting/stopping returns a function that can be used for updating
 * sequence and parameters (even on the fly).
 */
-export const verySmallSynth = (sequence, tempo) => {
+export const verySmallSynth = (sequence, tempo, onStepAdvance) => {
 	const audioContext = new AudioContext();
 	const sampleRate = audioContext.sampleRate;
 	const osc = freq => {
@@ -133,6 +133,7 @@ export const verySmallSynth = (sequence, tempo) => {
 				channel[CHANNEL_VOICES] = newVoices;
 			});
 			seq_step++;
+			onStepAdvance && onStepAdvance();
 			if (seq_step >= sequence.reset) {
 				seq_step = 0;
 			}
@@ -166,18 +167,22 @@ export const verySmallSynth = (sequence, tempo) => {
 		}
 	}
 	let play = false;
-	return (startPlayAt) => {
-		if (!play) {
-			channels = [];
-			seq_step = startPlayAt;
-			seq_sample = 0;
-			samplesPerBeat = 15 / tempo * sampleRate;
-			proc.connect(audioContext.destination);
-		}
-		play = !play;
-		return (newSequence, newTempo) => {
+	return {
+		toggle: (startPlayAt) => {
+			if (!play) {
+				channels = [];
+				seq_step = startPlayAt;
+				seq_sample = 0;
+				samplesPerBeat = 15 / tempo * sampleRate;
+				proc.connect(audioContext.destination);
+			}
+			play = !play;
+		},
+		update: (newSequence, newTempo) => {
 			sequence = newSequence ? newSequence : sequence;
 			tempo = newTempo ? newTempo : tempo;
-		}
+		},
+		playing: () => play,
+		step: () => seq_step
 	};
 }

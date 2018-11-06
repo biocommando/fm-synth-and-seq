@@ -2,7 +2,7 @@ import { createKnob, labelFormatter, optionsFormatter } from './knobs';
 import { fxList } from './fx-list';
 import { currentFx, currentPage, fxKnobIds, pages, tempo } from './state';
 import { updateSequence } from './play-sequence'
-import { page, setFmParam, setOctave, setTempo, fxEdit, convertLoadedData } from './synth-editor';
+import { page, setFmParam, setOctave, setTempo, fxEdit, convertLoadedData} from './synth-editor';
 import { bind, sealBindings } from './ui-bind';
 import { initStaticBindings } from './init-static-bindings';
 import * as dataStoreServerApi from './data-store-server-api';

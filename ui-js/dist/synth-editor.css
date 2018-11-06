@@ -54,12 +54,15 @@ body {
     background-color: magenta;
 }
 
-.grid-cell--playing--active {
-    background-color: lime;
+.grid-cell--playing {
+    background-color: cyan;
 }
 
-.grid-cell--playing {
-    background-color: darkcyan;
+.grid-cell--active.grid-cell--playing  {
+    background-color: lime;
+}
+.grid-cell--composition.grid-cell--playing  {
+    background-color: pink;
 }
 
 button,

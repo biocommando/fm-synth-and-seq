@@ -5,7 +5,7 @@ import { init, createNotes, createPage } from './synth-editor-init';
 import { bind, sealBindings } from './ui-bind';
 import dataStoreServerApi from './data-store-server-api';
 import { fxList } from './fx-list';
-import {getPreset} from './synth-presets';
+import { getPreset } from './synth-presets';
 
 export const clearPage = () => {
     state.pages[state.currentPage].notes = createNotes();
@@ -34,7 +34,7 @@ const zeropad = (num, width) => {
 const updatePageSelector = () => {
     const pages = [...state.pages];
     if (pages.length < 32) {
-        pages.push({name: '+ Add new page'});
+        pages.push({ name: '+ Add new page' });
     }
     document.getElementById('page-selector').innerHTML = pages.map((page, pageNum) =>
         `<option value="${pageNum - state.currentPage}"${pageNum === state.currentPage ? ' selected' : ''}>${zeropad(pageNum + 1, 2)}: ${page.name.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</option>`);
@@ -226,7 +226,7 @@ export const saveData = (id, name) => {
 }
 
 // for debugging
-window.setTrackDataJSON = text => convertLoadedData({success: true, data: JSON.parse(text)});
+window.setTrackDataJSON = text => convertLoadedData({ success: true, data: JSON.parse(text) });
 
 export const convertLoadedData = response => {
     if (response.success) {
@@ -297,6 +297,28 @@ export const fromToJson = () => {
 const loadJson = () => {
     fromJson(document.getElementById('json-text').value);
     document.getElementById('to-json').classList.add('hidden');
+};
+
+export const updatePlayStatusToGrid = () => {
+    if (!state.synth) {
+        return;
+    }
+    if (state.synth.playing()) {
+        document.querySelectorAll('[data-step]').forEach(e => e.classList.remove('grid-cell--playing'));
+        const seqPageStartStep = Math.floor(state.synth.step() / 32 / 16) * 16;
+        const compositionStep = Math.floor(state.synth.step() / 32) % 16;
+        if (state.pages[state.currentPage].composition[seqPageStartStep + compositionStep]) {
+            const seqStep = Math.floor(state.synth.step() / 2) % 16;
+            for (let i = 0; i < 8; i++) {
+                document.querySelector(`[data-step="${seqStep},${i}"]`).classList.add('grid-cell--playing');
+            }
+        }
+        if (state.pages[state.currentPage].compositionEditStartStep === seqPageStartStep) {
+            document.querySelector(`[data-step="${compositionStep},8"]`).classList.add('grid-cell--playing');
+        }
+    } else {
+        document.querySelectorAll('[data-step]').forEach(e => e.classList.remove('grid-cell--playing'));
+    }
 };
 
 setTimeout(init, 0);
