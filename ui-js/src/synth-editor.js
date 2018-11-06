@@ -56,7 +56,8 @@ export const page = direction => {
     });
     state.pages[state.currentPage].composition.forEach((st, x) => {
         if (st && x >= state.pages[state.currentPage].compositionEditStartStep && x < (state.pages[state.currentPage].compositionEditStartStep + 1) * 16) {
-            document.querySelector(`[data-step="${x - state.pages[state.currentPage].compositionEditStartStep},8"]`).classList.add('grid-cell--active');
+            const el = document.querySelector(`[data-step="${x - state.pages[state.currentPage].compositionEditStartStep},8"]`);
+            el && el.classList.add('grid-cell--active');
         }
     });
     state.currentFx = 0;

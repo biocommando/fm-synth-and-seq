@@ -64,6 +64,9 @@ body {
 .grid-cell--composition.grid-cell--playing  {
     background-color: pink;
 }
+.grid-cell--active.grid-cell--playing  {
+    background-color: lime;
+}
 
 button,
 select,
