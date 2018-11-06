@@ -1,4 +1,3 @@
-const fs = require('fs');
 const { Client } = require('pg');
 
 const client = new Client({
@@ -12,12 +11,9 @@ client.connect()
 
 
 let database;
-let file;
 let receivedUpdates = false;
 
-const connect = (fileName = 'db.dat') => {
-    file = fileName;
-    //database = JSON.parse(fs.readFileSync(file) + '');
+const connect = () => {
     client.query('select * from fm_seq.data where id = 1').then((res) => {
         database = JSON.parse(res.rows[0].data);
     });
@@ -25,8 +21,7 @@ const connect = (fileName = 'db.dat') => {
 
 const persist = () => {
     if (receivedUpdates) {
-        //fs.writeFileSync(file, JSON.stringify(database));
-        client.query('update fm_seq.data set data = $1', JSON.stringify(database));
+        client.query('update fm_seq.data set data = $1', [JSON.stringify(database)]);
         receivedUpdates = false;
         return true;
     }
