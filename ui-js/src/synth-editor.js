@@ -225,6 +225,9 @@ export const saveData = (id, name) => {
     });
 }
 
+// for debugging
+window.setTrackDataJSON = text => convertLoadedData({success: true, data: JSON.parse(text)});
+
 export const convertLoadedData = response => {
     if (response.success) {
         state.tempo = response.data.tempo;
