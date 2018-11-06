@@ -63,7 +63,11 @@ const handleRequest = (handlers, url, method, data, res, dataSizeLimit = 1e6) =>
             } else {
                 data = getQueryParams();
             }
-            console.log('parsed payload', data);
+            const loggableData = {...data};
+            if (loggableData.pass) {
+                loggableData.pass = '********';
+            }
+            console.log('parsed payload', loggableData);
 
             let user;
             if (!handler.anonymous) {
