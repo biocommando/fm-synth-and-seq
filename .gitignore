@@ -1,3 +1,5 @@
 /node_modules/*
 /ui-js/node_modules/*
 /ui-js/dist/main.js
+*.dat
+!db.dat
