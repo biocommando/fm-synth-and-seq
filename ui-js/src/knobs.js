@@ -30,7 +30,7 @@ document.addEventListener('touchend', mouseUp);
 
 var mouseMove = (event) => { 		
 	if(knobState.mouseDownKnob) {
-		var relativeChange = (knobState.originalPos - (event.screenY ? event.screenY : event.targetTouches[0].screenY)) / 64;
+		var relativeChange = (knobState.originalPos - (event.screenY ? event.screenY : event.targetTouches[0].screenY)) / 256;
 		var value = knobState.originalValue + relativeChange;
 		value = Math.min(Math.max(0, value), 1);
 		knobState.states[knobState.mouseDownKnob].value = value;
