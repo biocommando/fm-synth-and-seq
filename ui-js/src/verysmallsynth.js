@@ -183,6 +183,8 @@ export const verySmallSynth = (sequence, tempo, onStepAdvance) => {
 			tempo = newTempo ? newTempo : tempo;
 		},
 		playing: () => play,
-		step: () => seq_step
+		step: () => seq_step,
+		sr: sampleRate,
+		bs: proc.bufferSize
 	};
 }

@@ -310,18 +310,29 @@ export const updatePlayStatusToGrid = () => {
         return;
     }
     if (state.synth.playing()) {
-        document.querySelectorAll('[data-step]').forEach(e => e.classList.remove('grid-cell--playing'));
-        const seqPageStartStep = Math.floor(state.synth.step() / 32 / 16) * 16;
-        const compositionStep = Math.floor(state.synth.step() / 32) % 16;
-        if (state.pages[state.currentPage].composition[seqPageStartStep + compositionStep]) {
-            const seqStep = Math.floor(state.synth.step() / 2) % 16;
-            for (let i = 0; i < 8; i++) {
-                document.querySelector(`[data-step="${seqStep},${i}"]`).classList.add('grid-cell--playing');
+        const sampleRate = state.synth.sr;
+        const bufferSize = state.synth.bs;
+        // Latency of one buffer frame is bs/sr but the step change can occur at any point of the frame,
+        // so use 'half way through' (= latency + frame length / 2) as an approximate here
+        const latency = (bufferSize / sampleRate) * 1.5;
+        const latencyMoreThanStepLength = latency > (15 / state.tempo)
+        setTimeout(() => {
+            document.querySelectorAll('[data-step]').forEach(e => e.classList.remove('grid-cell--playing'));
+            const seqPageStartStep = Math.floor(state.synth.step() / 32 / 16) * 16;
+            const compositionStep = Math.floor(state.synth.step() / 32) % 16;
+            // Don't show the step playhead for slow devices, only the song position marker
+            if (!latencyMoreThanStepLength) {
+                if (state.pages[state.currentPage].composition[seqPageStartStep + compositionStep]) {
+                    const seqStep = Math.floor(state.synth.step() / 2) % 16;
+                    for (let i = 0; i < 8; i++) {
+                        document.querySelector(`[data-step="${seqStep},${i}"]`).classList.add('grid-cell--playing');
+                    }
+                }
             }
-        }
-        if (state.pages[state.currentPage].compositionEditStartStep === seqPageStartStep) {
-            document.querySelector(`[data-step="${compositionStep},8"]`).classList.add('grid-cell--playing');
-        }
+            if (state.pages[state.currentPage].compositionEditStartStep === seqPageStartStep) {
+                document.querySelector(`[data-step="${compositionStep},8"]`).classList.add('grid-cell--playing');
+            }
+        }, latency * 1000);
     } else {
         document.querySelectorAll('[data-step]').forEach(e => e.classList.remove('grid-cell--playing'));
     }
