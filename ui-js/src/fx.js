@@ -1,3 +1,31 @@
+/**
+ * Detects if the sum of 4 consecutive samples is above a certain limit.
+ * Optimized for speed in Chrome browser.
+ */
+const createSilenceDetector = () => {
+	const state = {
+		a: 0,
+		b: 0,
+		c: 0,
+		y: 0
+	};
+	return x => {
+		state.y = x + state.a + state.b + state.c < 1e-6;
+		state.c = state.b;
+		state.b = state.a;
+		state.a = Math.abs(x);
+		return state.y;
+	};
+};
+
+const createRatioBasedSilenceDetector = () => {
+	let y = 0;
+	return x => {
+		y = y * 0.9999 + Math.abs(x) * 0.0001;
+		return y < 1e-6;
+	};
+}
+
 export const fx = (() => {
 	const sampleRate = new AudioContext().sampleRate;
 
@@ -99,15 +127,37 @@ export const fx = (() => {
 			let phase = 0;
 			const decaySamples = decayMs / 1000 * sampleRate;
 			return x => {
-				phase = x !== 0 ? phase + 1  : 0;
-				
+				phase = x !== 0 ? phase + 1 : 0;
+
 				return phase > decaySamples ? 0 : x * (1 - phase / decaySamples);
 			};
 		},
 
-		stack: fxArray => {
-			return x => fxArray.reduce((a, b) => b(a), x);
+		plainFxStack: fxArray => x => fxArray.reduce((a, b) => b(a), x),
+
+		regularFxStack: fxArray => {
+			const silenceDetector = createSilenceDetector();
+			return x => {
+				if (!silenceDetector(x)) {
+					return fxArray.reduce((a, b) => b(a), x);
+				}
+				return 0;
+			};
+		},
+
+		outputAwareFxStack: fxArray => {
+			const inputSilenceDetector = createRatioBasedSilenceDetector();
+			const outputSilenceDetector = createRatioBasedSilenceDetector();
+			let outputNonSilent = false;
+			return x => {
+				if (outputNonSilent || !inputSilenceDetector(x)) {
+					const output = fxArray.reduce((a, b) => b(a), x);
+					outputNonSilent = !outputSilenceDetector(output);
+					return output;
+				}
+				return 0;
+			};
+
 		}
 	};
 })();
-

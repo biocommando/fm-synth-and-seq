@@ -20,7 +20,10 @@ const mapFx = allFx => {
     if (allFx.length === 0) {
         return undefined;
     }
-    return fx.stack(allFx.map(oneFx => fx[oneFx.name](...oneFx.params)));
+    // Time critical in this context means effects that create audible artifacts when paused abruptly
+    const hasTimeCriticalFx = allFx.some(oneFx => oneFx.name === 'delay' || oneFx.name === 'compressor');
+    const stackFn = hasTimeCriticalFx ? fx.outputAwareFxStack : fx.regularFxStack;
+    return stackFn(allFx.map(oneFx => fx[oneFx.name](...oneFx.params)));
 };
 const mapNotes = (notes, octave, chokeChords) => {
     const mapped = new Array(notes.length * 2).fill().map(() => new Array(8).fill(0));
