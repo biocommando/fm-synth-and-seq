@@ -304,19 +304,23 @@ const loadJson = () => {
     fromJson(document.getElementById('json-text').value);
     document.getElementById('to-json').classList.add('hidden');
 };
-
+let updatePlayStatusToGrid_handle;
 export const updatePlayStatusToGrid = () => {
     if (!state.synth) {
         return;
     }
     if (state.synth.playing()) {
+        if (updatePlayStatusToGrid_handle) {
+            return;
+        }
         const sampleRate = state.synth.sr;
         const bufferSize = state.synth.bs;
         // Latency of one buffer frame is bs/sr but the step change can occur at any point of the frame,
         // so use 'half way through' (= latency + frame length / 2) as an approximate here
         const latency = (bufferSize / sampleRate) * 1.5;
         const latencyMoreThanStepLength = latency > (15 / state.tempo)
-        setTimeout(() => {
+        updatePlayStatusToGrid_handle = setTimeout(() => {
+            updatePlayStatusToGrid_handle = undefined;
             document.querySelectorAll('[data-step]').forEach(e => e.classList.remove('grid-cell--playing'));
             const seqPageStartStep = Math.floor(state.synth.step() / 32 / 16) * 16;
             const compositionStep = Math.floor(state.synth.step() / 32) % 16;
@@ -334,6 +338,7 @@ export const updatePlayStatusToGrid = () => {
             }
         }, latency * 1000);
     } else {
+        clearTimeout(updatePlayStatusToGrid_handle);
         document.querySelectorAll('[data-step]').forEach(e => e.classList.remove('grid-cell--playing'));
     }
 };
