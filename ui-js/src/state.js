@@ -6,3 +6,4 @@ export let synth;
 export let synthSequenceUpdater;
 export let clipBoard;
 export const fxKnobIds = [];
+export let scale = 'n.min';

@@ -2,18 +2,11 @@ import {fx} from './fx';
 import * as state from './state';
 import {verySmallSynth} from './verysmallsynth';
 import {updatePlayStatusToGrid} from './synth-editor';
+import {scales} from './scales'
 
-const convertIndexToNote = i => {
-    switch (i) {
-        case 7: return 2;
-        case 6: return 4;
-        case 5: return 5;
-        case 4: return 7;
-        case 3: return 9;
-        case 2: return 10;
-        case 1: return 12;
-        case 0: return 14;
-    }
+const convertIndexToNote = idx => {
+    const scale = scales[state.scale ? state.scale : 'n.min'];
+    return scale[idx];
 };
 
 const mapFx = allFx => {

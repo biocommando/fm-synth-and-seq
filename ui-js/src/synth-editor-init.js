@@ -1,10 +1,11 @@
-import { createKnob, labelFormatter, optionsFormatter } from './knobs';
+import { createKnob, labelFormatter, optionsFormatter, selectOptionWith0to1Value } from './knobs';
 import { fxList } from './fx-list';
-import { currentFx, currentPage, fxKnobIds, pages, tempo } from './state';
+import { currentFx, currentPage, fxKnobIds, pages, tempo, scale } from './state';
 import { updateSequence } from './play-sequence'
-import { page, setFmParam, setOctave, setTempo, fxEdit, convertLoadedData} from './synth-editor';
+import { page, setFmParam, setOctave, setTempo, fxEdit, convertLoadedData, setScale} from './synth-editor';
 import { bind, sealBindings } from './ui-bind';
 import { initStaticBindings } from './init-static-bindings';
+import { scales } from './scales';
 import * as dataStoreServerApi from './data-store-server-api';
 import * as synthPresets from './synth-presets';
 
@@ -84,6 +85,8 @@ export const init = () => {
         }
     }, () => pages[currentPage].compositionEditStartStep / 8 / 16, v => 1 + Math.round(v * 8));
     createKnob(knobs, 'tempo', v => setTempo(Math.round(v * 140) + 60), () => (tempo - 60) / 140, () => tempo);
+    const scaleNames = Object.keys(scales);
+    createKnob(knobs, 'scale', v => setScale(selectOptionWith0to1Value(v, scaleNames)), () => (scaleNames.indexOf(scale) + .5) / scaleNames.length, optionsFormatter(scaleNames));
     knobs = document.getElementById('fx-param-knobs');
 
     const fxKnobOnChange = param => {

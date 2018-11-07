@@ -8,8 +8,6 @@ export const initStaticBindings = () => {
     document.getElementById('clear-button').onclick = clearPage;
     document.getElementById('copy-button').onclick = copy;
     document.getElementById('paste-button').onclick = paste;
-    /*document.getElementById('page-minus-button').onclick = () => page(-1);
-    document.getElementById('page-plus-button').onclick =  () => page(1);*/
     document.getElementById('current-fx').onchange = changeCurrentFx;
     document.getElementById('fx-list').onchange = insertFx;
     document.getElementById('remove-fx-button').onclick = removeCurrentFx;

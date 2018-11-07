@@ -211,13 +211,17 @@ export const removeCurrentFx = () => {
     }
 };
 
+export const setScale = (scaleName) => {
+    state.scale = scaleName;
+}
+
 export const saveData = (id, name) => {
     if (id) {
         if (!confirm('Overwrite the existing track?')) {
             return;
         }
     }
-    const requestData = { object: { tempo: state.tempo, pages: state.pages }, name };
+    const requestData = { object: { tempo: state.tempo, pages: state.pages, scale: state.scale }, name };
     dataStoreServerApi.setData(id, requestData, response => {
         if (response.success) {
             fromToJson();
@@ -234,6 +238,7 @@ export const convertLoadedData = response => {
         state.tempo = response.data.tempo;
         state.pages.splice(0);
         state.pages.push(...response.data.pages);
+        state.scale = response.data.scale;
         updateSequence();
         page(-100); // Set the page to 0
     }
